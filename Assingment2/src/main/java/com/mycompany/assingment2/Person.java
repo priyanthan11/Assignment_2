@@ -33,25 +33,25 @@ public abstract class Person {
     
     
     // Getters
-    public String GetName() { 
+    public String getName() { 
         return this.name;
     }
-    public String GetSurname(){
+    public String getSurname(){
         return this.surname;
     }
-    public String GetContectInfo() {
+    public String getContectInfo() {
         return this.contectInfo;
     }
     
     // Setters
-    public void SetName(String Name)
+    public void setName(String Name)
     {
         this.name = Name;
     }
-    public void SetSurename(String SurName){
+    public void setSurename(String SurName){
         this.surname = SurName;
     }
-    public void SetContectInfo(String ContactInfo){
+    public void setContectInfo(String ContactInfo){
         this.contectInfo = ContactInfo;
     }
     
