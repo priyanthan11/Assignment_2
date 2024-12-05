@@ -6,7 +6,7 @@ package com.mycompany.assingment2;
 
 /**
  *
- * @author priya
+ * @author priyanthan
  */
 public abstract class Person {
     
