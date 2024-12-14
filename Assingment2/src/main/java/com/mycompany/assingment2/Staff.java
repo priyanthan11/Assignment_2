@@ -34,7 +34,51 @@ public class Staff extends Person{
         this.roll = roll;
     }
     
-        
+    /*
+    Process a customer's parcel by validationg the rquest
+    * calculating fees, and updating the parcel's statis.
+    *@param customer the customer whose parcel is being processed
+    *@param parcel the parcel being proccessed at the moment.
+    */
+    public void processParcel(Customer customer,Parcel parcel)
+    {
+        if(parcel.validRequest())
+        {
+            System.out.println("The parcel processing for customer: "+ customer.getName());
+            double fee = parcel.calculateSorageFee();
+            System.out.println("Storage fee: £"+fee);
+            
+            customer.makePayment(fee);
+            parcel.updateStatus(Parcel.Status.COLLECTED);
+        }
+        else
+        {
+            System.out.println("Parcel"+parcel.getParcelID()+" cannot be processed. Current Status: "+parcel.getStatus());
+            
+        }
+    }
+    /*
+    *Add a parcel to the collection list
+    *@param parcel The parcel to be added to the list
+    */
+    public void addToCollection(Parcel parcel)
+    {
+        System.out.println("Staff"+getName()+"add parcel "+ parcel.getParcelID()+" to the collection list");
+    }
+    
+    /*
+    *view details of a specific parcel.
+    *@param parcel  The parcel whose details are to be viewed
+    */
+    public void viewParcelDetails(Parcel parcel)
+    {
+        System.out.println("Parcel Details: "+parcel.toString());
+    }
+    
+    
+    
+    
+    
     // Override Methods
     @Override
     public void requestParcelCollection(){
@@ -54,6 +98,8 @@ public class Staff extends Person{
     public void makePayment(double amount){
         System.out.println("Staff "+ getName()+ " has made a payment of £"+ amount);
     }
+    
+    
     
     //toString
     @Override

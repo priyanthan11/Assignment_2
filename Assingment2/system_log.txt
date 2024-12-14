@@ -1,0 +1,6 @@
+Parcel added: Parce IDP001, Status: PENDING, Dimensions: 500 cm³, Weight: 10.0Kg, Days in Deport: 2024-12-09
+Parcel added: Parce IDP002, Status: PENDING, Dimensions: 500 cm³, Weight: 5.0Kg, Days in Deport: 2024-12-12
+Customer added to queue: Name: Jhon, Surname: Doe, Contect Info: jh.doe@mama.com, Customer ID: C123
+Customer added to queue: Name: Jane, Surname: Smith, Contect Info: jane.smith@mama.com, Customer ID: C124
+Failed to process customer: Jhon
+Failed to process customer: Jhon

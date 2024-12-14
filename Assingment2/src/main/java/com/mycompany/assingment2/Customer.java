@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author priya
+ * @author priyanthan
  */
 public class Customer extends Person{
     // Attributes 
