@@ -23,13 +23,14 @@ public class ParcelMap {
     // Methods
     public void addParcel(Parcel parcel)
     {
-        parcelMap.put(parcel.getParcelID(), parcel);
+        String normalizedID = parcel.getParcelID().toUpperCase();
+        parcelMap.put(normalizedID, parcel);
         Log.getInstance().addEvent("Parcel added: "+ parcel);
     }
     
     public Parcel getParcelByID(String parcelID)
     {
-        return parcelMap.get(parcelID);
+        return parcelMap.get(parcelID.toUpperCase());
     }
     
     public boolean removeParcel(String parcelID)
@@ -41,6 +42,10 @@ public class ParcelMap {
             return true;
         }
         return false;
+    }
+    public boolean isEmpty()
+    {
+        return parcelMap.isEmpty();
     }
     
     public Map<String, Parcel> getParcelMap()

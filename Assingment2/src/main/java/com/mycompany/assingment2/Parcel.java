@@ -12,14 +12,37 @@ import java.time.temporal.ChronoUnit;
  * @author priyanthan
  */
 public class Parcel {
-    // Enum 
+    /*
+// Enum 
     public enum Status  {
-    PENDING,
-    COLLECTED,
-    IN_TRANSIT,
-    LOST
+    PENDING(0),
+    COLLECTED(1),
+    IN_TRANSIT(2),
+    LOST(3);
+    
+    private final int value;
+    
+    Status(int val)
+    {
+        this.value = val;
     }
     
+    // Method to get an enum from an integer
+    public static Status fromInt(int value)
+    {
+        for(Status sat :Status.values() )
+        {
+            if(sat.value == value)
+            {
+                return sat;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant for values: " + value);
+        //Log.getInstance().addEvent("No enum constant for values: " + value);
+    }
+    
+    }
+    */
     //Attributes
     private String parcelID;
     private Status status;
@@ -28,7 +51,7 @@ public class Parcel {
     private LocalDate daysInDepot; // Date that pacel arrived
     
     // constructor
-    public Parcel(String p_ID, Status status,int dimensions,double weight, LocalDate daysinDepot){
+    public Parcel(String p_ID, Status status, int dimensions, double weight, LocalDate daysinDepot){
         this.parcelID = p_ID;
         this.status = status;
         this.dimensions = dimensions;

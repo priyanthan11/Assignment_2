@@ -10,7 +10,7 @@ import java.util.Queue;
  * @author priyanthan
  */
 public class QueueofCustomers {
-    private Queue<Customer> customerQueue;
+    private  Queue<Customer> customerQueue;
     
     // constructor
     public QueueofCustomers()

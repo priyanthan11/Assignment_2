@@ -38,7 +38,7 @@ public class Worker {
         }
         double fee = parcel.calculateSorageFee();
         customer.makePayment(fee);
-        parcel.updateStatus(Parcel.Status.COLLECTED);
+        parcel.updateStatus(Status.valueOf("COLLECTED"));
         Log.getInstance().addEvent("Processed customer: " + customer);
         Log.getInstance().addEvent("Parcel collected: " + parcel);
         

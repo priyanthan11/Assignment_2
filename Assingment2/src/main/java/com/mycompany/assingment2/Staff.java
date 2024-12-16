@@ -49,7 +49,7 @@ public class Staff extends Person{
             System.out.println("Storage fee: £"+fee);
             
             customer.makePayment(fee);
-            parcel.updateStatus(Parcel.Status.COLLECTED);
+            parcel.updateStatus(Status.valueOf("COLLECTED"));
         }
         else
         {
