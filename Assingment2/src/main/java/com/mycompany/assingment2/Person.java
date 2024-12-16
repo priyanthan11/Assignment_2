@@ -20,14 +20,14 @@ public abstract class Person {
     // Attributes
     private String name;
     private String surname;
-    private String contectInfo;
+    private String contactInfo;
     
     // Constructor
     public Person(String name,String surname,String contactInfo)
     {
         this.name = name;
         this.surname = surname;
-        this.contectInfo = contactInfo;
+        this.contactInfo = contactInfo;
     }
     
     
@@ -40,7 +40,7 @@ public abstract class Person {
         return this.surname;
     }
     public String getContectInfo() {
-        return this.contectInfo;
+        return this.contactInfo;
     }
     
     // Setters
@@ -52,7 +52,7 @@ public abstract class Person {
         this.surname = SurName;
     }
     public void setContectInfo(String ContactInfo){
-        this.contectInfo = ContactInfo;
+        this.contactInfo = ContactInfo;
     }
     
     // Abstract fucntions
@@ -63,6 +63,6 @@ public abstract class Person {
     // toString method for log
     @Override
     public String toString(){
-        return "Name: "+this.name+", Surname: "+this.surname+", Contect Info: "+this.contectInfo;
+        return "Name: "+this.name+", Surname: "+this.surname+", Contact Info: "+this.contactInfo;
     }
 }

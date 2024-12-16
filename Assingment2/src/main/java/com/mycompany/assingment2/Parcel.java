@@ -132,7 +132,7 @@ public class Parcel {
     @Override
     public String toString()
     {
-        return "Parce ID" + parcelID +
+        return "Parcel ID" + parcelID +
                 ", Status: " + status +
                 ", Dimensions: " + dimensions + " cm³" +
                 ", Weight: " + weight + "Kg" +

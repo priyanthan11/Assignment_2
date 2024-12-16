@@ -41,7 +41,7 @@ public class Manager {
                 }
                 else
                 {
-                    Log.getInstance().addEvent("Missing Details in the Soruce file");
+                    Log.getInstance().addEvent("Missing Details in the Source file");
                 }
                 
                 
@@ -150,11 +150,11 @@ public class Manager {
         System.out.println(parcelMap.getParcelByID("P001"));
         
         worker.processNextCustomer();
-        worker.processNextCustomer();
+        worker.processNextCustomer();*/
         
         // Write log to file
         String file_loc = "system_log.txt";
-        Log.getInstance().writeLogToFile(file_loc);*/
+        Log.getInstance().writeLogToFile(file_loc);
     }
 
 }

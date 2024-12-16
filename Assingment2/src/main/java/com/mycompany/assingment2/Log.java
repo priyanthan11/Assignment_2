@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.assingment2;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -31,7 +34,10 @@ public class Log {
     // Methpds
     public void addEvent(String event)
     {
-        logBuffer.append(event).append("\n");
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm:ss");
+        String formattedNow = currentDateTime.format(formatter);
+        logBuffer.append(formattedNow+" " + event).append("\n");
         System.out.println(event);
     }
     
