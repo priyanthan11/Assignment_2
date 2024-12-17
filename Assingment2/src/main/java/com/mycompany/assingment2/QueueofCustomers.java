@@ -3,13 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.assingment2;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 /**
  *
  * @author priyanthan
  */
-public class QueueofCustomers {
+public class QueueofCustomers implements Iterable<Customer>{
     private  Queue<Customer> customerQueue;
     
     // constructor
@@ -50,6 +51,20 @@ public class QueueofCustomers {
         return customerQueue.size();
     }
     
+    public Customer peek()
+    {
+        return customerQueue.peek();
+    }
+    public Customer poll()
+    {
+        return customerQueue.poll();
+    }
+
+    @Override
+    public Iterator<Customer> iterator() 
+    {
+        return customerQueue.iterator();
+    }
     
     
     

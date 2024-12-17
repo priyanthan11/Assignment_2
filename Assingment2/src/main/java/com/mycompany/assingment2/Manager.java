@@ -20,9 +20,12 @@ import java.util.Iterator;
 public class Manager {
     // Create Gloabal Customer QUeue
     // Customer Queue
-    static QueueofCustomers cus_queue = new QueueofCustomers();
+    private static QueueofCustomers cus_queue = new QueueofCustomers();
     // Initialize Parcel
-    static ParcelMap parcelMap = new ParcelMap();
+    private static ParcelMap parcelMap = new ParcelMap();
+    
+    
+     
     
     
     
@@ -67,17 +70,18 @@ public class Manager {
         String cus_fileName = "C:/Users/priya/OneDrive - University of Hertfordshire/Modules/Software Arch/Assignment/Assignment_2/Assingment2/src/main/java/com/mycompany/assingment2/Custs.csv";
         // Parcel File path
         String par_fileName = "C:/Users/priya/OneDrive - University of Hertfordshire/Modules/Software Arch/Assignment/Assignment_2/Assingment2/src/main/java/com/mycompany/assingment2/Parcels.csv";
-        
+        // Staff File Path
+        String sta_fileName = "C:/Users/priya/OneDrive - University of Hertfordshire/Modules/Software Arch/Assignment/Assignment_2/Assingment2/src/main/java/com/mycompany/assingment2/Staff.csv";
         // Customer List
         Queue<String[]> customerDetails;
         // Get Customer Details from csv file
         customerDetails = Load_data(cus_fileName);
         // Iterate the details till end of the data.
-        while(!customerDetails.isEmpty())
+        for(String[] data : customerDetails)
         {
-            addCustomer(customerDetails);
+            addCustomer(data);
         }
-        
+              
         // Create Queue for parcel
         Queue<String[]> parcelDetails;
         // Load the data into Queue
@@ -87,7 +91,12 @@ public class Manager {
             addParcel(parcelDetails);
         }
             
+        Queue<String[]> StaffDetails;
+        StaffDetails = Load_data(sta_fileName);
+        while (!StaffDetails.isEmpty())
+        {
             
+        }
         /*
         Iterator<String> it = parcelDetails.iterator();
         while(it.hasNext())
@@ -122,9 +131,8 @@ public class Manager {
     TODO: Add Parcel - X
     TODO: Release Parcel and put it in Collected Queue
     */
-    public static void addCustomer(Queue<String[]> customerDetails)
+    public static void addCustomer(String[] cus_det)
     {
-        String[] cus_det = customerDetails.poll();
         // Create customer
         cus_queue.addCustomerToQueue(new Customer(cus_det[0],cus_det[1],cus_det[2],cus_det[3]));  
     }
@@ -136,6 +144,37 @@ public class Manager {
             
     }
     
+    public static void addStaff(Queue<String[]> staffDetails)
+    {
+        String[] Cus_det = staffDetails.poll();
+        
+        
+        
+    }
+    public ArrayList<String> getCustomerName()
+    {
+        
+        
+        ArrayList<String> cus_name = new ArrayList<>();
+        for(Customer costomer : cus_queue)
+        {
+            cus_name.add(costomer.getName());
+        }
+        return cus_name;
+    }
+    
+    public Customer getCustomerDetails(String Name)
+    {
+        
+        for(Customer customer : cus_queue)
+        {
+            if(customer.getName() == Name)
+            {
+                return customer;
+            }
+        }
+        return null;
+    }
     
     public static void main(String[] args) 
     {
@@ -143,6 +182,10 @@ public class Manager {
         prerequisite();
         
         
+           
+        
+        
+        Welcome_Page wp = new Welcome_Page();
         
         String file_loc = "system_log.txt";
         Log.getInstance().writeLogToFile(file_loc);
