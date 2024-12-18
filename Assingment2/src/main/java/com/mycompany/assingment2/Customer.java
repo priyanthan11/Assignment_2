@@ -16,28 +16,38 @@ public class Customer extends Person{
     private String customerID;
     // Tracks parcel IDs the customer interacted with
     private ArrayList<String> parcelHistory; 
-    
+    private String parcelID;
     // Customer Constructor
-    public Customer(String name,String surname,String contactInfo, String customerID){
+    public Customer(String name,String surname,String contactInfo, String customerID,String parcelID){
         super(name,surname,contactInfo);
         this.customerID = customerID;
         this.parcelHistory = new ArrayList<>();
+        this.parcelID = parcelID;
+        
     }
     
     
     // Getters and setters
     public String getCustomerID(){
+        Log.getInstance().addEvent("Customer Id requested");
         return this.customerID;
     }
     public ArrayList<String> getParcelHistory(){
+        Log.getInstance().addEvent("Parcel History requested");
         return this.parcelHistory;
     }
     
     // Setters
     public void setCustomerID(String C_ID){
+        
         this.customerID = C_ID;
     }
     
+    public String getParcelID()
+    {
+        Log.getInstance().addEvent("Parcel Id requested");
+        return this.parcelID;
+    }
     
     
     // Override Methods

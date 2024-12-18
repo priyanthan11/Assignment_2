@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.Queue;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Iterator;
 
@@ -21,14 +22,16 @@ public class Manager {
     // Create Gloabal Customer QUeue
     // Customer Queue
     private static QueueofCustomers cus_queue = new QueueofCustomers();
+    //private static CustomerList cus_List = new CustomerList();
     // Initialize Parcel
     private static ParcelMap parcelMap = new ParcelMap();
     
+    private static Worker worker = new Worker(cus_queue,parcelMap);
     
      
     
     
-    
+   /* 
     // Load the data
     public static Queue Load_data(String fileName)
     {
@@ -61,8 +64,50 @@ public class Manager {
             Log.getInstance().addEvent(e.getMessage());
         }
         return cus_queue; 
-    }
+    }*/
+    
+    
+    public static ArrayList<String[]> Load_data(String fileName) 
+    {
+        Log.getInstance().addEvent("System Reading Files...");
+        ArrayList<String[]> customerList = new ArrayList<>();
 
+        try (BufferedReader my_reader = new BufferedReader(new FileReader(new File(fileName)))) {
+            String line;
+
+            while ((line = my_reader.readLine()) != null) {
+                // Add to the log
+                Log.getInstance().addEvent("System Loaded Data: " + line);
+
+                // Split the line into parts
+                String[] details = line.split(",");
+                if (details.length >= 4) {
+                    customerList.add(details); // Add the split array to the list
+                } else {
+                    Log.getInstance().addEvent("Missing Details in the Source file: " + line);
+                }
+            }
+        } catch (Exception e) {
+            Log.getInstance().addEvent("Something went wrong");
+            Log.getInstance().addEvent(e.getMessage());
+        }
+
+        return customerList;
+    }
+    
+    
+    
+    public static ArrayList<String[]> sortBySurname(ArrayList<String[]> data) {
+        data.sort(new Comparator<String[]>() {
+            @Override
+            public int compare(String[] customer1, String[] customer2) {
+                String surname1 = customer1[1].trim(); // Extract surname from first customer
+                String surname2 = customer2[1].trim(); // Extract surname from second customer
+                return surname1.compareTo(surname2);  // Compare surnames alphabetically
+            }
+        });
+        return data;
+    }
        
     public static void prerequisite()
     {
@@ -73,30 +118,28 @@ public class Manager {
         // Staff File Path
         String sta_fileName = "C:/Users/priya/OneDrive - University of Hertfordshire/Modules/Software Arch/Assignment/Assignment_2/Assingment2/src/main/java/com/mycompany/assingment2/Staff.csv";
         // Customer List
-        Queue<String[]> customerDetails;
+        ArrayList<String[]> customerDetails;
         // Get Customer Details from csv file
-        customerDetails = Load_data(cus_fileName);
+        customerDetails = sortBySurname(Load_data(cus_fileName));
         // Iterate the details till end of the data.
+        Log.getInstance().addEvent("Worker working on customer details...");
         for(String[] data : customerDetails)
         {
-            addCustomer(data);
+            worker.addCustomer(data);
         }
-              
+        Log.getInstance().addEvent("Worker done processing customer details");  
         // Create Queue for parcel
-        Queue<String[]> parcelDetails;
+        ArrayList<String[]> parcelDetails;
         // Load the data into Queue
-        parcelDetails = Load_data(par_fileName);
-        while(!parcelDetails.isEmpty())
+        parcelDetails = sortBySurname(Load_data(par_fileName));
+        Log.getInstance().addEvent("Worker working on parcel details...");
+        for(String[] data : parcelDetails)
         {
-            addParcel(parcelDetails);
+            worker.addParcel(data);
         }
-            
-        Queue<String[]> StaffDetails;
-        StaffDetails = Load_data(sta_fileName);
-        while (!StaffDetails.isEmpty())
-        {
-            
-        }
+        Log.getInstance().addEvent("Worker done processing parcel details");
+        
+        
         /*
         Iterator<String> it = parcelDetails.iterator();
         while(it.hasNext())
@@ -130,7 +173,7 @@ public class Manager {
     TODO: Remove Customer
     TODO: Add Parcel - X
     TODO: Release Parcel and put it in Collected Queue
-    */
+    
     public static void addCustomer(String[] cus_det)
     {
         // Create customer
@@ -174,8 +217,14 @@ public class Manager {
             }
         }
         return null;
-    }
+    }*/
     
+    
+    
+    public Worker getWorker()
+    {
+        return worker;
+    }
     public static void main(String[] args) 
     {
         // Begin play

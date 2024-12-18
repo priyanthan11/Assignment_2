@@ -36,6 +36,10 @@ public class Welcome_Page implements ActionListener{
     List customerList = new List();
     //HashMap<String, String> loginInfo = new HashMap<String,String>();
     
+    // Parcel List
+    JLabel parcel_Names = new JLabel("Parcel Name List");
+    List parcelList = new List();
+    
     // Show Customer Details
     
     JButton showButton = new JButton("Show Details");
@@ -48,19 +52,31 @@ public class Welcome_Page implements ActionListener{
     JLabel customer_info = new JLabel("Customer Info: ");
     JLabel show_customer_info = new JLabel("N/A");
     
-    
+    // Show Customer Details
+    JLabel parcel_ID = new JLabel("Parcel_ID: ");
+    JLabel show_parcel_ID = new JLabel("N/A");
+    JLabel status = new JLabel("Parcel Status: ");
+    JLabel show_status = new JLabel("N/A");
+    JLabel Dimention = new JLabel("Dimention cm³: ");
+    JLabel show_Dimention = new JLabel("N/A");
+    JLabel weight = new JLabel("Weight Info: ");
+    JLabel show_weight_info = new JLabel("N/A");
+    JLabel depositDate = new JLabel("Depo Date: ");
+    JLabel show_depositDate = new JLabel("N/A");
+    JLabel fee = new JLabel("Total Fee: ");
+    JLabel show_fee = new JLabel("N/A");
     
     
     Manager manager = new Manager();
     
-    public void getCustomerNames()
-    {
-        customerList.removeAll();
-        ArrayList<String> cus_name = new ArrayList<>();
-        for(String cus : manager.getCustomerName())
-            customerList.add(cus);
-    }
+    /*
+    @TODO: List of still to be processed Parcels - done 
+    @TODO: Current Queue of Customers 
+    @TODO: Details of parcel corrently working with worker
+    @TODO: Each pannel should be update when data added or removed
     
+    */
+      
     
     Welcome_Page()
     {
@@ -76,6 +92,15 @@ public class Welcome_Page implements ActionListener{
         getCustomerNames();
         frame.add(CustomerNames);
         frame.add(customerList);
+        
+        
+        //customerList.
+        parcel_Names.setBounds(50,260,150,25);
+        parcelList.setBounds(50,300,100,100);
+        getParcelsID();
+        frame.add(parcel_Names);
+        frame.add(parcelList);
+        
         
         // Show the details of selected customer from the list
         // Button
@@ -104,8 +129,38 @@ public class Welcome_Page implements ActionListener{
         frame.add(customer_info);
         frame.add(show_customer_info);
         
+        // Show the details of parcel associate with selected customer from the list
         
+        // Parcels
+        parcel_ID.setBounds(350,140,100,25);
+        show_parcel_ID.setBounds(450,140,100,25);
+        frame.add(parcel_ID);
+        frame.add(show_parcel_ID);
         
+        status.setBounds(350,160,100,25);
+        show_status.setBounds(450,160,100,25);
+        frame.add(status);
+        frame.add(show_status);
+        
+        Dimention.setBounds(350,180,100,25);
+        show_Dimention.setBounds(450,180,100,25);
+        frame.add(Dimention);
+        frame.add(show_Dimention);
+        
+        weight.setBounds(350,200,100,25);
+        show_weight_info.setBounds(450,200,100,25);
+        frame.add(weight);
+        frame.add(show_weight_info);
+        
+        depositDate.setBounds(350,220,100,25);
+        show_weight_info.setBounds(450,220,100,25);
+        frame.add(depositDate);
+        frame.add(show_depositDate);
+        
+        fee.setBounds(350,240,100,25);
+        show_fee.setBounds(450,240,100,25);
+        frame.add(fee);
+        frame.add(show_fee);
         
         
         //messageLabel.setBounds(125,250,250,35);
@@ -136,8 +191,48 @@ public class Welcome_Page implements ActionListener{
 	frame.setVisible(true);
     }
     
+   public void getCustomerNames()
+    {
+        customerList.removeAll();
+        for(String cus : manager.getWorker().getCustomerName())
+            customerList.add(cus);
+    }
+   
+   public void getParcelsID()
+    {
+        parcelList.removeAll();
+        for(String parcelID : manager.getWorker().getParcelID())
+        {
+            System.out.println(parcelID);
+            parcelList.add(parcelID);
+        }
+    }
+   
+   public void getCustomerDetails()
+   {
+       // Get the selected customer
+            String SelectedName = customerList.getSelectedItem();
+            // Null check
+            if(SelectedName != null)
+            {
+                // Get the details of Customer
+                Customer selectedCustomer = manager.getWorker().getCustomerDetails(SelectedName);
+                show_customer_ID.setText(selectedCustomer.getCustomerID());
+                show_fname.setText(selectedCustomer.getName());
+                show_lname.setText(selectedCustomer.getSurname());
+                show_customer_info.setText(selectedCustomer.getContectInfo()); 
+                
+                // Get parcel details associate with customer ID
+                getParcelDetails();
+            }
+            
+            System.out.println(SelectedName);
+   }
     
-    
+   public void getParcelDetails()
+   {
+      
+   }
     
     
 
@@ -147,24 +242,7 @@ public class Welcome_Page implements ActionListener{
         // Show details
         if(e.getSource() == showButton)
         {
-            // Get the selected customer
-            String SelectedName = customerList.getSelectedItem();
-            // Null check
-            if(SelectedName != null)
-            {
-                // Get the details of Customer
-                Customer selectedCustomer = manager.getCustomerDetails(SelectedName);
-                show_customer_ID.setText(selectedCustomer.getCustomerID());
-                show_fname.setText(selectedCustomer.getName());
-                show_lname.setText(selectedCustomer.getSurname());
-                show_customer_info.setText(selectedCustomer.getContectInfo());
-                
-            }
-            
-            
-            
-            
-            System.out.println(SelectedName);
+            getCustomerDetails();
         }
     }
      

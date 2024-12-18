@@ -6,37 +6,42 @@ package com.mycompany.assingment2;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
- * @author priyanthan
+ * @author priya
  */
-public class ParcelMap {
-    private Map<String, Parcel> parcelMap;
+public class PackageDetails {
+    private Map<String,Parcel> package_details;
+    private Customer customer;
+    private Parcel parcel;
     
-    // constructor
-    public ParcelMap()
+    // Constructor
+    public PackageDetails(Customer customer, Parcel parcel)
     {
-        this.parcelMap = new HashMap<>();
+        this.customer = customer;
+        this.parcel = parcel;
+        this.package_details = new HashMap<>();
     }
     
+    
     // Methods
-    public void addParcel(Parcel parcel)
+    public void addParcel(String cus_ID, Parcel parcel)
     {
-        String normalizedID = parcel.getParcelID().toUpperCase();
-        parcelMap.put(normalizedID, parcel);
+        String normalizedID = cus_ID.toUpperCase();
+        
+        package_details.put(normalizedID, parcel);
         Log.getInstance().addEvent("Parcel added: "+ parcel);
     }
     
     public Parcel getParcelByID(String parcelID)
     {
-        return parcelMap.get(parcelID.toUpperCase());
+        return package_details.get(parcelID.toUpperCase());
     }
     
     public boolean removeParcel(String parcelID)
     {
-        Parcel removed = parcelMap.remove(parcelID);
+        Parcel removed = package_details.remove(parcelID);
         if(removed != null)
         {
             Log.getInstance().addEvent("Parcel removed: "+removed);
@@ -44,26 +49,14 @@ public class ParcelMap {
         }
         return false;
     }
-    
-    public boolean isContaints(String ParcelID)
-    {
-        return parcelMap.containsKey(ParcelID);
-    }
-    
     public boolean isEmpty()
     {
-        return parcelMap.isEmpty();
+        return package_details.isEmpty();
     }
     
     public Map<String, Parcel> getParcelMap()
     {
-        return parcelMap;
+        return package_details;
     }
-    
-    public Set<Map.Entry<String,Parcel>> entrySet()
-    {
-        return parcelMap.entrySet();
-    }
-   
     
 }
