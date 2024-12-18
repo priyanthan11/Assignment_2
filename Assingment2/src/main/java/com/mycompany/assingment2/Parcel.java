@@ -72,8 +72,8 @@ public class Parcel {
     public double getWeight() {
         return weight;
     }   
-     public LocalDate getDaysInDepot() {
-        return daysInDepot;
+     public String getDaysInDepot() {
+        return daysInDepot.toString();
     }
     
     public void setParcelID(String parcelID) {

@@ -36,6 +36,10 @@ public abstract class Person {
     public String getName() { 
         return this.name;
     }
+    public String getFullName()
+    {
+        return this.name+ " "+ this.surname;
+    }
     public String getSurname(){
         return this.surname;
     }

@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import java.awt.List;
 
+
 /**
  *
  * @author priya
@@ -88,7 +89,7 @@ public class Welcome_Page implements ActionListener{
         
         //customerList.
         CustomerNames.setBounds(50,60,150,25);
-        customerList.setBounds(50,100,100,100);
+        customerList.setBounds(50,100,140,150);
         getCustomerNames();
         frame.add(CustomerNames);
         frame.add(customerList);
@@ -153,7 +154,7 @@ public class Welcome_Page implements ActionListener{
         frame.add(show_weight_info);
         
         depositDate.setBounds(350,220,100,25);
-        show_weight_info.setBounds(450,220,100,25);
+        show_depositDate.setBounds(450,220,100,25);
         frame.add(depositDate);
         frame.add(show_depositDate);
         
@@ -223,14 +224,25 @@ public class Welcome_Page implements ActionListener{
                 show_customer_info.setText(selectedCustomer.getContectInfo()); 
                 
                 // Get parcel details associate with customer ID
-                getParcelDetails();
+                getParcelDetails(selectedCustomer.getParcelID());
             }
             
             System.out.println(SelectedName);
    }
     
-   public void getParcelDetails()
+   public void getParcelDetails(String ParcelID)
    {
+      System.out.println(manager.getWorker().getParcel(ParcelID));
+      Parcel parcel = manager.getWorker().getParcel(ParcelID);
+      show_parcel_ID.setText(parcel.getParcelID());
+      show_status.setText(parcel.getStatus().toString());
+      show_Dimention.setText(Integer.toString(parcel.getDimensions()));
+      show_weight_info.setText(Double.toString(parcel.getWeight()));
+      show_depositDate.setText(parcel.getDaysInDepot());
+      show_fee.setText(Double.toString(parcel.calculateSorageFee()));
+      
+      
+      
       
    }
     

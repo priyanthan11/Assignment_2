@@ -100,4 +100,9 @@ public class Worker {
         return cus_name;
     }
     
+    public Parcel getParcel(String key)
+    {
+        return parcelMap.getParcelByID(key);
+    }
+    
 }
