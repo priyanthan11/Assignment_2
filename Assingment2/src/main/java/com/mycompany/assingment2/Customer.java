@@ -22,11 +22,8 @@ public class Customer extends Person{
         super(name,surname,contactInfo);
         this.customerID = customerID;
         this.parcelHistory = new ArrayList<>();
-        this.parcelID = parcelID;
-        
+        this.parcelID = parcelID; 
     }
-    
-    
     // Getters and setters
     public String getCustomerID(){
         Log.getInstance().addEvent("Customer Id requested");
@@ -48,8 +45,7 @@ public class Customer extends Person{
         Log.getInstance().addEvent("Parcel Id requested");
         return this.parcelID;
     }
-    
-    
+       
     // Override Methods
     @Override
     public void requestParcelCollection(){

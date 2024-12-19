@@ -10,7 +10,7 @@ package com.mycompany.assingment2;
  */
 enum Status {
         // Enum 
-    
+    PROCESSING,
     PENDING,
     COLLECTED,
     IN_TRANSIT,

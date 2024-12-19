@@ -36,9 +36,9 @@ public class ParcelMap {
     
     public boolean removeParcel(String parcelID)
     {
-        Parcel removed = parcelMap.remove(parcelID);
-        if(removed != null)
+        if(isContaints(parcelID))
         {
+            Parcel removed = parcelMap.remove(parcelID);
             Log.getInstance().addEvent("Parcel removed: "+removed);
             return true;
         }

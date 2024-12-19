@@ -15,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import java.awt.List;
+import java.util.Set;
 
 
 /**
@@ -38,12 +39,12 @@ public class Welcome_Page implements ActionListener{
     //HashMap<String, String> loginInfo = new HashMap<String,String>();
     
     // Parcel List
-    JLabel parcel_Names = new JLabel("Parcel Name List");
+    JLabel parcel_Names = new JLabel("Pending parcels to be processed: ");
     List parcelList = new List();
     
     // Show Customer Details
     
-    JButton showButton = new JButton("Show Details");
+    JButton showButton = new JButton("Process");
     JLabel customer_ID = new JLabel("Customer ID: ");
     JLabel show_customer_ID = new JLabel("N/A");
     JLabel fname = new JLabel("First Name: ");
@@ -67,8 +68,11 @@ public class Welcome_Page implements ActionListener{
     JLabel fee = new JLabel("Total Fee: ");
     JLabel show_fee = new JLabel("N/A");
     
+    JButton pay = new JButton("Pay: "+"   ");
+    
     
     Manager manager = new Manager();
+    double payment = 0.0;
     
     /*
     @TODO: List of still to be processed Parcels - done 
@@ -96,8 +100,8 @@ public class Welcome_Page implements ActionListener{
         
         
         //customerList.
-        parcel_Names.setBounds(50,260,150,25);
-        parcelList.setBounds(50,300,100,100);
+        parcel_Names.setBounds(250,60,150,25);
+        parcelList.setBounds(250,100,100,100);
         getParcelsID();
         frame.add(parcel_Names);
         frame.add(parcelList);
@@ -105,63 +109,70 @@ public class Welcome_Page implements ActionListener{
         
         // Show the details of selected customer from the list
         // Button
-        showButton.setBounds(200,150,110,25);
+        showButton.setBounds(50,270,110,25);
         showButton.setFocusable(false);
 	showButton.addActionListener(this);
         frame.add(showButton);
         // lables
-        customer_ID.setBounds(350,60,100,25);
-        show_customer_ID.setBounds(450,60,100,25);
+        customer_ID.setBounds(50,300,100,25);
+        show_customer_ID.setBounds(150,300,100,25);
         frame.add(customer_ID);
         frame.add(show_customer_ID);
         
-        fname.setBounds(350,80,100,25);
-        show_fname.setBounds(450,80,100,25);
+        fname.setBounds(50,320,100,25);
+        show_fname.setBounds(150,320,100,25);
         frame.add(fname);
         frame.add(show_fname);
         
-        lname.setBounds(350,100,100,25);
-        show_lname.setBounds(450,100,100,25);
+        lname.setBounds(50,340,100,25);
+        show_lname.setBounds(150,340,100,25);
         frame.add(lname);
         frame.add(show_lname);
         
-        customer_info.setBounds(350,120,100,25);
-        show_customer_info.setBounds(450,120,100,25);
+        customer_info.setBounds(50,360,100,25);
+        show_customer_info.setBounds(150,360,100,25);
         frame.add(customer_info);
         frame.add(show_customer_info);
         
         // Show the details of parcel associate with selected customer from the list
         
         // Parcels
-        parcel_ID.setBounds(350,140,100,25);
-        show_parcel_ID.setBounds(450,140,100,25);
+        parcel_ID.setBounds(250,300,100,25);
+        show_parcel_ID.setBounds(365,300,100,25);
         frame.add(parcel_ID);
         frame.add(show_parcel_ID);
         
-        status.setBounds(350,160,100,25);
-        show_status.setBounds(450,160,100,25);
+        status.setBounds(250,320,100,25);
+        show_status.setBounds(365,320,100,25);
         frame.add(status);
         frame.add(show_status);
         
-        Dimention.setBounds(350,180,100,25);
-        show_Dimention.setBounds(450,180,100,25);
+        Dimention.setBounds(250,340,100,25);
+        show_Dimention.setBounds(365,340,100,25);
         frame.add(Dimention);
         frame.add(show_Dimention);
         
-        weight.setBounds(350,200,100,25);
-        show_weight_info.setBounds(450,200,100,25);
+        weight.setBounds(250,360,100,25);
+        show_weight_info.setBounds(365,360,100,25);
         frame.add(weight);
         frame.add(show_weight_info);
         
-        depositDate.setBounds(350,220,100,25);
-        show_depositDate.setBounds(450,220,100,25);
+        depositDate.setBounds(250,380,100,25);
+        show_depositDate.setBounds(365,380,100,25);
         frame.add(depositDate);
         frame.add(show_depositDate);
         
-        fee.setBounds(350,240,100,25);
-        show_fee.setBounds(450,240,100,25);
+        fee.setBounds(250,400,100,25);
+        show_fee.setBounds(365,400,160,25);
         frame.add(fee);
         frame.add(show_fee);
+        
+        
+        // Pay Button
+        pay.setBounds(400,440,110,25);
+        pay.setFocusable(false);
+	pay.addActionListener(this);
+        frame.add(pay);
         
         
         //messageLabel.setBounds(125,250,250,35);
@@ -207,17 +218,22 @@ public class Welcome_Page implements ActionListener{
             System.out.println(parcelID);
             parcelList.add(parcelID);
         }
+        //getCustomerDetails();
     }
    
    public void getCustomerDetails()
    {
+            
        // Get the selected customer
             String SelectedName = customerList.getSelectedItem();
+            //String SelectedName = manager.getWorker().getCustomerName().getFirst();
             // Null check
             if(SelectedName != null)
             {
                 // Get the details of Customer
                 Customer selectedCustomer = manager.getWorker().getCustomerDetails(SelectedName);
+                //selectedCustomer
+                
                 show_customer_ID.setText(selectedCustomer.getCustomerID());
                 show_fname.setText(selectedCustomer.getName());
                 show_lname.setText(selectedCustomer.getSurname());
@@ -232,17 +248,33 @@ public class Welcome_Page implements ActionListener{
     
    public void getParcelDetails(String ParcelID)
    {
+       
       System.out.println(manager.getWorker().getParcel(ParcelID));
       Parcel parcel = manager.getWorker().getParcel(ParcelID);
-      show_parcel_ID.setText(parcel.getParcelID());
+      parcel.setStatus(Status.PROCESSING);
+      
+      show_parcel_ID.setText(parcel.getParcelID()); 
       show_status.setText(parcel.getStatus().toString());
       show_Dimention.setText(Integer.toString(parcel.getDimensions()));
       show_weight_info.setText(Double.toString(parcel.getWeight()));
       show_depositDate.setText(parcel.getDaysInDepot());
-      show_fee.setText(Double.toString(parcel.calculateSorageFee()));
+      payment = parcel.calculateSorageFee();
+      show_fee.setText(Double.toString(payment));
+      pay.setText("Pay: " + Double.toString(parcel.calculateSorageFee()));
       
-      
-      
+      /*if(parcel.getStatus() == parcel.getStatus().PENDING )
+      {
+        
+      }
+      else
+      {
+        //show_parcel_ID.setText(parcel.getParcelID());
+        show_status.setText("N/A");
+        show_Dimention.setText("N/A");
+        show_weight_info.setText("N/A");
+        show_depositDate.setText("N/A");
+        show_fee.setText("N/A");
+      }*/
       
    }
     
@@ -255,6 +287,18 @@ public class Welcome_Page implements ActionListener{
         if(e.getSource() == showButton)
         {
             getCustomerDetails();
+        }
+        if(e.getSource() == pay)
+        {
+            // Ask the customer to pay the ammount
+            PaymentPopup payPopup = new PaymentPopup(frame,show_fee,payment);
+            payPopup.show();
+            manager.getWorker().removeCustomer();
+            getCustomerNames();
+            getCustomerDetails();
+            getParcelsID();
+            
+            
         }
     }
      
