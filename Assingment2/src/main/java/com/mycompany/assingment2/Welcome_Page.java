@@ -4,25 +4,25 @@
  */
 package com.mycompany.assingment2;
 
-import java.awt.Font;
+//import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
+//import javax.swing.JList;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import java.awt.List;
-import java.util.Set;
+import javax.swing.JComboBox;
 
 
 /**
  *
  * @author priya
  */
-public class Welcome_Page implements ActionListener{
+public class Welcome_Page implements ActionListener,CustomerObserver{
     
     JFrame frame = new JFrame();
     JButton loginButton = new JButton("Login");
@@ -36,11 +36,13 @@ public class Welcome_Page implements ActionListener{
     // Customer List
     JLabel CustomerNames = new JLabel("Customer Name List");
     List customerList = new List();
+    JComboBox<String> customerCombo = new JComboBox<>();
     //HashMap<String, String> loginInfo = new HashMap<String,String>();
     
     // Parcel List
     JLabel parcel_Names = new JLabel("Pending parcels to be processed: ");
     List parcelList = new List();
+    JComboBox<String> parcelCombo = new JComboBox<>();
     
     // Show Customer Details
     
@@ -53,6 +55,9 @@ public class Welcome_Page implements ActionListener{
     JLabel show_lname = new JLabel("N/A");
     JLabel customer_info = new JLabel("Customer Info: ");
     JLabel show_customer_info = new JLabel("N/A");
+    
+    // Manage Customer 
+    JButton ManagerCustomerButton = new JButton("Alter Customer");
     
     // Show Customer Details
     JLabel parcel_ID = new JLabel("Parcel_ID: ");
@@ -69,10 +74,14 @@ public class Welcome_Page implements ActionListener{
     JLabel show_fee = new JLabel("N/A");
     
     JButton pay = new JButton("Pay: "+"   ");
+    JButton search = new JButton("Search");
+    JTextField searchField = new JTextField();
     
+    JButton deleteButton = new JButton("Delete: "+"   ");
     
     Manager manager = new Manager();
     double payment = 0.0;
+    ArrayList<String> currentQueue = new ArrayList<>();
     
     /*
     @TODO: List of still to be processed Parcels - done 
@@ -93,18 +102,21 @@ public class Welcome_Page implements ActionListener{
         
         //customerList.
         CustomerNames.setBounds(50,60,150,25);
-        customerList.setBounds(50,100,140,150);
+        //customerList.setBounds(50,100,140,150);
+        customerCombo.setBounds(50,100,140,25);
         getCustomerNames();
         frame.add(CustomerNames);
         frame.add(customerList);
-        
+        frame.add(customerCombo);
         
         //customerList.
         parcel_Names.setBounds(250,60,150,25);
-        parcelList.setBounds(250,100,100,100);
+        //parcelList.setBounds(250,100,100,100);
+        parcelCombo.setBounds(250,100,100,25);
         getParcelsID();
         frame.add(parcel_Names);
         frame.add(parcelList);
+        frame.add(parcelCombo);
         
         
         // Show the details of selected customer from the list
@@ -113,6 +125,13 @@ public class Welcome_Page implements ActionListener{
         showButton.setFocusable(false);
 	showButton.addActionListener(this);
         frame.add(showButton);
+        
+        ManagerCustomerButton.setBounds(180,270,110,25);
+        ManagerCustomerButton.setFocusable(false);
+	ManagerCustomerButton.addActionListener(this);
+        frame.add(ManagerCustomerButton);
+        
+        
         // lables
         customer_ID.setBounds(50,300,100,25);
         show_customer_ID.setBounds(150,300,100,25);
@@ -174,7 +193,22 @@ public class Welcome_Page implements ActionListener{
 	pay.addActionListener(this);
         frame.add(pay);
         
+        // Search button
+        search.setBounds(320,270,110,25);
+        search.setFocusable(false);
+	search.addActionListener(this);
+        frame.add(search);
+        searchField.setBounds(440,270,110,25);
+        frame.add(searchField);
         
+        
+        
+        // Delete
+        // Search button
+        deleteButton.setBounds(250,440,110,25);
+        deleteButton.setFocusable(false);
+	deleteButton.addActionListener(this);
+        frame.add(deleteButton);
         //messageLabel.setBounds(125,250,250,35);
         //messageLabel.setFont(new Font(null,Font.ITALIC,25));
 		
@@ -206,24 +240,57 @@ public class Welcome_Page implements ActionListener{
    public void getCustomerNames()
     {
         customerList.removeAll();
+        customerCombo.removeAllItems();
         for(String cus : manager.getWorker().getCustomerName())
+        {
             customerList.add(cus);
+            customerCombo.addItem(cus);
+            currentQueue.add(cus);
+        }
     }
    
    public void getParcelsID()
-    {
+    { 
         parcelList.removeAll();
+        parcelCombo.removeAllItems();
         for(String parcelID : manager.getWorker().getParcelID())
         {
             System.out.println(parcelID);
             parcelList.add(parcelID);
+            parcelCombo.addItem(parcelID);
         }
         //getCustomerDetails();
     }
-   
+   public boolean getSpecificCustomer(String Name,boolean isSearch)
+   {
+       
+       for(Customer cus : manager.getWorker().getCustomers())
+        {
+            if(cus.getFullName().toLowerCase().equals(Name.toLowerCase()) || cus.getName().toLowerCase().equals(Name.toLowerCase()))
+            {
+                System.out.println(Name);
+                show_customer_ID.setText(cus.getCustomerID());
+                show_fname.setText(cus.getName());
+                show_lname.setText(cus.getSurname());
+                show_customer_info.setText(cus.getContectInfo()); 
+                
+                // Get parcel details associate with customer ID
+                getParcelDetails(cus.getParcelID(),isSearch);
+                
+                return true;
+            }
+        }
+       return false;
+   }
    public void getCustomerDetails()
    {
-            
+        
+        String Name = (String)customerCombo.getSelectedItem();
+        
+        getSpecificCustomer(Name,false);
+        
+       
+         /*   
        // Get the selected customer
             String SelectedName = customerList.getSelectedItem();
             //String SelectedName = manager.getWorker().getCustomerName().getFirst();
@@ -243,16 +310,18 @@ public class Welcome_Page implements ActionListener{
                 getParcelDetails(selectedCustomer.getParcelID());
             }
             
-            System.out.println(SelectedName);
+            System.out.println(SelectedName);*/
    }
     
-   public void getParcelDetails(String ParcelID)
+   public void getParcelDetails(String ParcelID,boolean isSearch)
    {
        
-      System.out.println(manager.getWorker().getParcel(ParcelID));
+      //System.out.println(manager.getWorker().getParcel(ParcelID));
       Parcel parcel = manager.getWorker().getParcel(ParcelID);
-      parcel.setStatus(Status.PROCESSING);
-      
+      if(!isSearch)
+      {
+          parcel.setStatus(Status.PROCESSING);
+      }
       show_parcel_ID.setText(parcel.getParcelID()); 
       show_status.setText(parcel.getStatus().toString());
       show_Dimention.setText(Integer.toString(parcel.getDimensions()));
@@ -278,7 +347,20 @@ public class Welcome_Page implements ActionListener{
       
    }
     
-    
+    public void resetLabledData()
+    {
+        show_customer_ID.setText("N/A");
+        show_fname.setText("N/A");
+        show_lname.setText("N/A");
+        show_customer_info.setText("N/A");
+        show_parcel_ID.setText("N/A"); 
+        show_status.setText("N/A");
+        show_Dimention.setText("N/A");
+        show_weight_info.setText("N/A");
+        show_depositDate.setText("N/A");
+        show_fee.setText("N/A");
+        pay.setText("Pay: " + "N/A");
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) 
@@ -297,10 +379,43 @@ public class Welcome_Page implements ActionListener{
             getCustomerNames();
             getCustomerDetails();
             getParcelsID();
-            
-            
+        }
+        if(e.getSource() == ManagerCustomerButton)
+        {
+            ManageCustomer managerCus = new ManageCustomer(customerCombo,parcelCombo);
+            managerCus.show();
+        }
+        if(e.getSource() == search)
+        {
+            String name = searchField.getText();
+            if(getSpecificCustomer(name,true))
+                deleteButton.setText("Delete: "+name);
+        }
+        if(e.getSource() == deleteButton)
+        {
+            String name = searchField.getText();
+            Customer tempcus = manager.getWorker().getCustomerDetails(name);
+            manager.getWorker().removeCustomerbyName(manager.getWorker().getCustomers(), name);
+            manager.getWorker().removeParcel(tempcus.getParcelID());
+            customerCombo.removeAll();
+            parcelCombo.removeAll();
+            getCustomerNames();
+            getParcelsID();
+            resetLabledData();
         }
     }
+
+    @Override
+    public void update(JComboBox<String> customerCombo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public JComboBox<String> getComboBox() {
+        return customerCombo;
+    }
+
+    
      
         
 }

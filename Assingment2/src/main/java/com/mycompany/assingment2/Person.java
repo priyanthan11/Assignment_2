@@ -21,6 +21,7 @@ public abstract class Person {
     private String name;
     private String surname;
     private String contactInfo;
+    private String fullName;
     
     // Constructor
     public Person(String name,String surname,String contactInfo)
@@ -28,6 +29,7 @@ public abstract class Person {
         this.name = name;
         this.surname = surname;
         this.contactInfo = contactInfo;
+        this.fullName = name+" "+surname;
     }
     
     
@@ -38,7 +40,7 @@ public abstract class Person {
     }
     public String getFullName()
     {
-        return this.name+ " "+ this.surname;
+        return fullName;
     }
     public String getSurname(){
         return this.surname;

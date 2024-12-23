@@ -8,7 +8,7 @@ package com.mycompany.assingment2;
  *
  * @author priya
  */
-enum Status {
+public enum Status {
         // Enum 
     PROCESSING,
     PENDING,

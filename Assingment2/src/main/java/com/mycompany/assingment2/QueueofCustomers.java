@@ -25,6 +25,13 @@ public class QueueofCustomers implements Iterable<Customer>{
         customerQueue.add(customer);
         Log.getInstance().addEvent("Customer added to queue: " + customer);
     }
+    public void addCustomerToQueue(QueueofCustomers cus)
+    {
+        for(Customer customer : cus)
+        {
+            customerQueue.add(customer);
+        }
+    }
     
     public Customer removeCustomerFromQueue()
     {

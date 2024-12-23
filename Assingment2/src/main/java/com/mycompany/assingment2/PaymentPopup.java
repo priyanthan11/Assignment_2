@@ -43,14 +43,14 @@ public class PaymentPopup {
                 double payment = Double.parseDouble(inputField.getText());
 
                 // Check if payment is valid
-                if (payment <= 0) {
-                    JOptionPane.showMessageDialog(paymentDialog, "Payment must be greater than 0.", "Error", JOptionPane.ERROR_MESSAGE);
+                if (payment < remainingBalance) {
+                    JOptionPane.showMessageDialog(paymentDialog, "Payment must be greater than or equal to  "+remainingBalance+".", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                if (payment > remainingBalance) {
+                /*if (payment > remainingBalance) {
                     JOptionPane.showMessageDialog(paymentDialog, "Payment exceeds remaining balance.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
-                }
+                }*/
 
                 // Subtract payment from the remaining balance
                 remainingBalance -= payment;
