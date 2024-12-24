@@ -23,9 +23,9 @@ public class QueueofCustomers implements Iterable<Customer>{
     public void addCustomerToQueue(Customer customer)
     {
         customerQueue.add(customer);
-        Log.getInstance().addEvent("Customer added to queue: " + customer);
+        //Log.getInstance().addEvent("Customer added to queue: " + customer);
     }
-    public void addCustomerToQueue(QueueofCustomers cus)
+    public void addCustomer_ToQueue(QueueofCustomers cus)
     {
         for(Customer customer : cus)
         {
@@ -65,6 +65,10 @@ public class QueueofCustomers implements Iterable<Customer>{
     public Customer poll()
     {
         return customerQueue.poll();
+    }
+    public void clear()
+    {
+        customerQueue.clear();
     }
 
     @Override

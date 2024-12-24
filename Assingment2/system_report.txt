@@ -1,0 +1,12 @@
+###################################
+
+
+#  Report of 2024-12-24#
+
+
+###################################
+
+
+Customer: John  Brown have been collected his/her parcel at: 2024-12-24
+Customer: Mary  Brown have been collected his/her parcel at: 2024-12-24
+Total sale: 1248.0

@@ -24,6 +24,11 @@ public class Worker {
     private static HashSet<String> exisitingCustomerID = new HashSet<>();
     private static HashSet<String> exisitingParcelID = new HashSet<>();
     private Status status;
+    private Queue<Customer> collected_cus = new LinkedList<>();
+    private Queue<Parcel> collected_par = new LinkedList<>();
+    
+    private double totalSale = 0.0f;
+    
     // constructor
     public Worker(QueueofCustomers List, ParcelMap parcelMap)
     {
@@ -173,30 +178,32 @@ public class Worker {
         return parcelMap.getParcelByID(key);
     }
     
+    
     public void removeCustomer()
     {
         Customer done_cus;
         done_cus =cus_queue.poll(); 
+        System.out.println(done_cus);
         String parcel_ID = done_cus.getParcelID();
-        removeParcel(parcel_ID);
-        addCollectedDetails(done_cus);
+        
+        addCollectedDetails(done_cus,parcel_ID);
         Log.getInstance().addEvent("Customer: "+done_cus+ " Has been remove from waiting Queue" );  
     }
     
-    public void removeCustomerbyName(QueueofCustomers queue,String Name)
+    public void removeCustomerbyName(String Name)
     {
         QueueofCustomers tempQueue = new QueueofCustomers();
-
+        System.out.println(Name);
         // Iterate through the queue and re-add all elements except the one to delete
-        while (!queue.isEmpty()) {
-            Customer current = queue.poll(); // Get and remove the head of the queue
+        while (!cus_queue.isEmpty()) {
+            Customer current = cus_queue.poll(); // Get and remove the head of the queue
             if (!current.getFullName().toLowerCase().equals(Name.toLowerCase())|| !current.getName().toLowerCase().equals(Name.toLowerCase())) {
                 tempQueue.addCustomerToQueue(current); // Keep the element if it's not the one to delete
             }
+            
         }
-
         // Replace the original queue with the filtered queue
-        queue.addCustomerToQueue(tempQueue);
+        cus_queue.addCustomer_ToQueue(tempQueue);
     }
     public static void deleteByName(Queue<String> queue, String name) {
         
@@ -207,12 +214,80 @@ public class Worker {
         parcelMap.removeParcel(key);
         Log.getInstance().addEvent("Parcel: "+key+" has been removed");
     }
-    public void addCollectedDetails(Customer colleced_cus)
+    public void addCollectedDetails(Customer collected_cust,String parcel_ID)
     {
-        Log.getInstance().addEvent("Customer: "+colleced_cus.getFullName()+" Collected his/her's parcel: "+colleced_cus.getParcelID());
-    }
-   
+        collected_cus.add(collected_cust);
+        Parcel removed_par = getParcel(parcel_ID);
+        totalSale += removed_par.calculateSorageFee();
         
+        collected_par.add(removed_par);
+        removeParcel(parcel_ID);
+        Log.getInstance().addEvent("Customer: "+collected_cust.getFullName()+" Collected his/her's parcel: "+collected_cust.getParcelID());
+    }
+   public ArrayList<String> getCollectedCustomer()
+   {
+       ArrayList<String> collected = new ArrayList<>();
+       if(collected_cus.isEmpty())
+       {
+           Log.getInstance().addEvent("Parcel Collected List is empty. Try again later");
+       }
+       else
+       {
+           
+           for(Customer cus : collected_cus)
+            {
+                collected.add(cus.getFullName());
+            }
+       }
+       
+       return collected;
+   }
+   
+   public void createReport()
+   {
+       // Should be
+       // Tell newly added customer
+       // Tell removed customers
+       // Summerize the collection today
+       ArrayList<String> report = new ArrayList<>();
+       
+       report.add("###################################");
+       report.add("\n");
+       report.add("#  Report of "+LocalDate.now().toString()+"#");
+       report.add("\n");
+       report.add("###################################");
+       report.add("\n");
+       
+       for(Customer cus : collected_cus)
+       {
+           report.add("Customer: "+cus.getFullName()+" collected his/her parcel at: "+ LocalDate.now().toString());
+       }
+       
+       // Total Sale
+       report.add("\n");
+       report.add("Total sale: "+Double.toString(totalSale));
+       
+       if(!report.isEmpty())
+       {
+           String file_loc = "system_report.txt";
+       try(java.io.FileWriter writer = new java.io.FileWriter(file_loc))
+        {
+            for(String re : report)
+            {
+                writer.write(re);
+                writer.write("\n");
+            }
+               
+            System.out.println("Log written to "+ file_loc);
+            
+        }catch (Exception e)
+                {
+                    System.out.println("Error writing report to file: "+e.getMessage());
+                }
+       }
+       
+               
+   }
      
     
 }

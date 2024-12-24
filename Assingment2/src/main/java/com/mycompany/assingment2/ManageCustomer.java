@@ -81,14 +81,12 @@ public class ManageCustomer implements ActionListener{
         this.parentFrame = new JFrame();
         
         Manager manager = new Manager();
+        statusCombo.addItem("Select Status");
         for(Status stat : Status.values())
         {
             statusCombo.addItem(stat.toString());
         }
        
-        
-        
-        
     }
 
     // Show the popup to manage customer details
@@ -130,7 +128,7 @@ public class ManageCustomer implements ActionListener{
         deleteButton.setBounds(350, 260, 150, 25);
         deleteButton.setFocusable(false);
         deleteButton.addActionListener(this);
-        parentFrame.add(deleteButton);
+        //parentFrame.add(deleteButton);
         
         
         
@@ -182,7 +180,8 @@ public class ManageCustomer implements ActionListener{
                 !surnameField.getText().trim().isEmpty()&& 
                 !contactField.getText().trim().isEmpty() && 
                 !dimensionsField.getText().trim().isEmpty()&&
-                !weightField.getText().trim().isEmpty())
+                !weightField.getText().trim().isEmpty()&&
+                !statusCombo.getSelectedItem().equals("Select Status"))
         {
             
             Manager manager = new Manager();

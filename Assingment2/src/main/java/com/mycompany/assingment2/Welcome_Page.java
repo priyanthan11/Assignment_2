@@ -40,13 +40,13 @@ public class Welcome_Page implements ActionListener,CustomerObserver{
     //HashMap<String, String> loginInfo = new HashMap<String,String>();
     
     // Parcel List
-    JLabel parcel_Names = new JLabel("Pending parcels to be processed: ");
+    JLabel parcel_Names = new JLabel("Pending parcels");
     List parcelList = new List();
     JComboBox<String> parcelCombo = new JComboBox<>();
     
     // Show Customer Details
     
-    JButton showButton = new JButton("Process");
+    JButton showButton = new JButton("Process Next ");
     JLabel customer_ID = new JLabel("Customer ID: ");
     JLabel show_customer_ID = new JLabel("N/A");
     JLabel fname = new JLabel("First Name: ");
@@ -57,7 +57,7 @@ public class Welcome_Page implements ActionListener,CustomerObserver{
     JLabel show_customer_info = new JLabel("N/A");
     
     // Manage Customer 
-    JButton ManagerCustomerButton = new JButton("Alter Customer");
+    JButton ManagerCustomerButton = new JButton("Add Customer");
     
     // Show Customer Details
     JLabel parcel_ID = new JLabel("Parcel_ID: ");
@@ -78,6 +78,9 @@ public class Welcome_Page implements ActionListener,CustomerObserver{
     JTextField searchField = new JTextField();
     
     JButton deleteButton = new JButton("Delete: "+"   ");
+    JButton viewButton = new JButton("View Customer");
+    JButton viewCollectedButton = new JButton("Collected");
+    JButton createReportButton = new JButton("Gen-Report");
     
     Manager manager = new Manager();
     double payment = 0.0;
@@ -121,12 +124,13 @@ public class Welcome_Page implements ActionListener,CustomerObserver{
         
         // Show the details of selected customer from the list
         // Button
-        showButton.setBounds(50,270,110,25);
+        showButton.setBounds(50,250,140,25);
         showButton.setFocusable(false);
 	showButton.addActionListener(this);
+        //showButton.setText("Process: " + manager.getWorker().getCustomers().peek().getFullName());
         frame.add(showButton);
         
-        ManagerCustomerButton.setBounds(180,270,110,25);
+        ManagerCustomerButton.setBounds(200,250,120,25);
         ManagerCustomerButton.setFocusable(false);
 	ManagerCustomerButton.addActionListener(this);
         frame.add(ManagerCustomerButton);
@@ -192,23 +196,42 @@ public class Welcome_Page implements ActionListener,CustomerObserver{
         pay.setFocusable(false);
 	pay.addActionListener(this);
         frame.add(pay);
+        pay.setEnabled(false);
         
         // Search button
-        search.setBounds(320,270,110,25);
+        search.setBounds(325,250,110,25);
         search.setFocusable(false);
 	search.addActionListener(this);
         frame.add(search);
-        searchField.setBounds(440,270,110,25);
+        searchField.setBounds(440,250,110,25);
         frame.add(searchField);
         
-        
-        
         // Delete
-        // Search button
         deleteButton.setBounds(250,440,110,25);
         deleteButton.setFocusable(false);
 	deleteButton.addActionListener(this);
-        frame.add(deleteButton);
+        //frame.add(deleteButton);
+        
+        // View
+        viewButton.setBounds(50,150,140,25);
+        viewButton.setFocusable(false);
+	viewButton.addActionListener(this);
+        frame.add(viewButton);
+        
+        // View collected
+        viewCollectedButton.setBounds(400,480,110,25);
+        viewCollectedButton.setFocusable(false);
+	viewCollectedButton.addActionListener(this);
+        viewCollectedButton.setEnabled(false);
+        frame.add(viewCollectedButton);
+        
+        // View collected
+        createReportButton.setBounds(270,480,110,25);
+        createReportButton.setFocusable(false);
+	createReportButton.addActionListener(this);
+        createReportButton.setEnabled(false);
+        frame.add(createReportButton);
+        
         //messageLabel.setBounds(125,250,250,35);
         //messageLabel.setFont(new Font(null,Font.ITALIC,25));
 		
@@ -241,6 +264,7 @@ public class Welcome_Page implements ActionListener,CustomerObserver{
     {
         customerList.removeAll();
         customerCombo.removeAllItems();
+        customerCombo.addItem("Select Customer");
         for(String cus : manager.getWorker().getCustomerName())
         {
             customerList.add(cus);
@@ -285,8 +309,9 @@ public class Welcome_Page implements ActionListener,CustomerObserver{
    public void getCustomerDetails()
    {
         
-        String Name = (String)customerCombo.getSelectedItem();
-        
+        //String Name = (String)customerCombo.getSelectedItem();
+        String Name = manager.getWorker().getCustomers().peek().getName();
+        System.out.println(Name);
         getSpecificCustomer(Name,false);
         
        
@@ -321,6 +346,11 @@ public class Welcome_Page implements ActionListener,CustomerObserver{
       if(!isSearch)
       {
           parcel.setStatus(Status.PROCESSING);
+           pay.setEnabled(true);
+      }
+      else
+      {
+          pay.setEnabled(false);
       }
       show_parcel_ID.setText(parcel.getParcelID()); 
       show_status.setText(parcel.getStatus().toString());
@@ -365,20 +395,33 @@ public class Welcome_Page implements ActionListener,CustomerObserver{
     @Override
     public void actionPerformed(ActionEvent e) 
     {   
+        if(e.getSource() == viewButton)
+        {
+            String Name = (String)customerCombo.getSelectedItem();
+            
+            getSpecificCustomer(Name,true);
+            
+        }
         // Show details
         if(e.getSource() == showButton)
         {
+            
             getCustomerDetails();
+            pay.setEnabled(true);
         }
         if(e.getSource() == pay)
         {
             // Ask the customer to pay the ammount
+            
             PaymentPopup payPopup = new PaymentPopup(frame,show_fee,payment);
             payPopup.show();
             manager.getWorker().removeCustomer();
+            viewCollectedButton.setEnabled(true);
+            createReportButton.setEnabled(true);
             getCustomerNames();
             getCustomerDetails();
             getParcelsID();
+            resetLabledData();
         }
         if(e.getSource() == ManagerCustomerButton)
         {
@@ -393,15 +436,28 @@ public class Welcome_Page implements ActionListener,CustomerObserver{
         }
         if(e.getSource() == deleteButton)
         {
-            String name = searchField.getText();
+            String name = show_fname.getText();
+            System.out.println("Delete Name: "+name);
+            
             Customer tempcus = manager.getWorker().getCustomerDetails(name);
-            manager.getWorker().removeCustomerbyName(manager.getWorker().getCustomers(), name);
+            System.out.println("Delete Name: "+tempcus.getFullName());
+            manager.getWorker().removeCustomerbyName(name);
             manager.getWorker().removeParcel(tempcus.getParcelID());
-            customerCombo.removeAll();
-            parcelCombo.removeAll();
+            showButton.setText("Process: " + manager.getWorker().getCustomers().peek().getFullName());
             getCustomerNames();
             getParcelsID();
             resetLabledData();
+            
+        }
+        if(e.getSource() == viewCollectedButton)
+        {
+            ArrayList<String> Collected_customer = manager.getWorker().getCollectedCustomer();
+            RemovedCustomer rdata = new RemovedCustomer(Collected_customer);
+                      
+        }
+        if(e.getSource() == createReportButton)
+        {
+            manager.getWorker().createReport();
         }
     }
 
